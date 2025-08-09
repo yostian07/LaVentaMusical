@@ -1,0 +1,14 @@
+@using System.Web.Script.Serialization
+@{
+    var payload = new
+    {
+        Success = TempData["Success"] as string,
+        Info = TempData["Info"] as string,
+        Warning = TempData["Warning"] as string,
+        Error = TempData["Error"] as string
+    };
+    var json = new JavaScriptSerializer().Serialize(payload);
+}
+<script>
+  window.__toasts = @Html.Raw(json);
+</script>

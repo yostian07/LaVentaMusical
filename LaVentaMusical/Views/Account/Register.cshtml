@@ -1,0 +1,54 @@
+﻿@model LaVentaMusical.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Crear cuenta";
+}
+
+<div class="row auth-wrap">
+    <div class="col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+        <div class="panel panel-default">
+            <div class="panel-heading text-center">
+                <h3 class="panel-title">
+                    <span class="glyphicon glyphicon-user"></span>
+                    &nbsp; Crear cuenta
+                </h3>
+            </div>
+
+            <div class="panel-body">
+                @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Email, "Correo electrónico")
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "tu@correo.com", autocomplete = "email" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Password, "Contraseña")
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Mínimo 6 caracteres", autocomplete = "new-password" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.ConfirmPassword, "Confirmar contraseña")
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Repite la contraseña", autocomplete = "new-password" })
+                        @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>
+
+                    <button type="submit" class="btn btn-success btn-block">Registrarme</button>
+
+                    <p class="help-block m-top-10 text-center">
+                        ¿Ya tienes cuenta?
+                        @Html.ActionLink("Inicia sesión", "Login", "Account")
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

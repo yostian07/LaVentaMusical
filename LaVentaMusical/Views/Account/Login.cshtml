@@ -1,0 +1,65 @@
+﻿@using LaVentaMusical.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Iniciar sesión";
+}
+
+<div class="row auth-wrap">
+    <div class="col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+        <div class="panel panel-default">
+            <div class="panel-heading text-center">
+                <h3 class="panel-title">
+                    <span class="glyphicon glyphicon-log-in"></span>
+                    &nbsp; Iniciar sesión
+                </h3>
+            </div>
+
+            <div class="panel-body">
+                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Email)
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "tu@correo.com", autocomplete = "username" })
+                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.Password, "Contraseña")
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "••••••••", autocomplete = "current-password" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            @Html.CheckBoxFor(m => m.RememberMe) Mantener sesión iniciada
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+
+                    <p class="help-block m-top-10 text-center">
+                        ¿No tienes cuenta?
+                        @Html.ActionLink("Crear una nueva", "Register", "Account")
+                    </p>
+
+                    @* Si habilitas recuperación:
+                        <p class="text-center">
+                            @Html.ActionLink("¿Olvidaste tu contraseña?", "ForgotPassword", "Account")
+                        </p>
+                    *@
+                }
+            </div>
+
+            <div class="panel-footer">
+                @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

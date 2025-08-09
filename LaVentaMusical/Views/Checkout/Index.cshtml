@@ -1,0 +1,80 @@
+@model LaVentaMusical.Models.ViewModels.CheckoutVM
+@{
+    ViewBag.Title = "Checkout";
+}
+
+<h2>Checkout</h2>
+
+@using (Html.BeginForm("Pagar", "Checkout", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <h3>Resumen</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Canción</th>
+                <th class="text-right">Precio</th>
+                <th class="text-right">Cant.</th>
+                <th class="text-right">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var l in Model.Carrito.Lineas)
+            {
+                <tr>
+                    <td>@l.Nombre (@l.CancionID)</td>
+                    <td class="text-right">@l.Precio.ToString("C")</td>
+                    <td class="text-right">@l.Cantidad</td>
+                    <td class="text-right">@l.SubtotalLinea.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>Subtotal: <strong>@Model.Carrito.Subtotal.ToString("C")</strong></p>
+    <p>IVA 13%: <strong>@(Math.Round(Model.Carrito.Subtotal * 0.13m, 2).ToString("C"))</strong></p>
+    <p>Crédito disponible: <strong>@Model.DineroDisponibleUsuario.ToString("C")</strong></p>
+
+    <hr />
+
+    <div class="form-group">
+        <label for="MetodoPago">Método de pago</label>
+        @Html.DropDownListFor(m => m.MetodoPago,
+            new SelectList(new[] { "PayPal", "Transferencia Bancaria", "Tarjeta de Crédito" }),
+            new { @class = "form-control", id = "MetodoPago" })
+        @Html.ValidationMessageFor(m => m.MetodoPago, "", new { @class = "text-danger" })
+    </div>
+
+    <div id="cardFields" style="display:none">
+        <div class="form-group">
+            @Html.LabelFor(m => m.NumeroTarjeta, "Número de tarjeta")
+            @Html.TextBoxFor(m => m.NumeroTarjeta, new { @class = "form-control", placeholder = "0000 0000 0000 0000", maxlength = "23", autocomplete = "cc-number" })
+            @Html.ValidationMessageFor(m => m.NumeroTarjeta, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.CVV, "CVV")
+            @Html.TextBoxFor(m => m.CVV, new { @class = "form-control", maxlength = "4", placeholder = "CVV", autocomplete = "cc-csc" })
+            @Html.ValidationMessageFor(m => m.CVV, "", new { @class = "text-danger" })
+        </div>
+        <p class="text-muted">Se aplica 2% de comisión por tarjeta.</p>
+    </div>
+
+    <button class="btn btn-primary">Confirmar y Pagar</button>
+    <a class="btn btn-link" href="@Url.Action("Index","Carrito")">Volver al carrito</a>
+}
+
+@section scripts{
+    <script>
+        (function () {
+            var sel = document.getElementById('MetodoPago');
+            var card = document.getElementById('cardFields');
+            function toggle() {
+                card.style.display = (sel.value === 'Tarjeta de Crédito') ? 'block' : 'none';
+            }
+            sel.addEventListener('change', toggle);
+            toggle(); // estado inicial
+        })();
+    </script>
+}

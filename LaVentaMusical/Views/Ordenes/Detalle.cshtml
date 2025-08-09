@@ -1,0 +1,50 @@
+@model LaVentaMusical.Infrastructure.DemoVenta
+@{
+    ViewBag.Title = "Detalle de Factura";
+}
+
+<h2>Factura @Model.NumeroFactura</h2>
+<p>Fecha: @Model.FechaCompra</p>
+<p>
+    Método:
+    @(string.IsNullOrEmpty(Model.TarjetaEnmascarada)
+        ? Model.MetodoPago
+        : Model.TarjetaEnmascarada)
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Canción</th>
+            <th class="text-right">Cant.</th>
+            <th class="text-right">Precio</th>
+            <th class="text-right">Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var d in Model.Detalles)
+        {
+            <tr>
+                <td>@d.Nombre (@d.CancionID)</td>
+                <td class="text-right">@d.Cantidad</td>
+                <td class="text-right">@d.PrecioUnitario.ToString("C")</td>
+                <td class="text-right">@d.Subtotal.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p>Subtotal: <strong>@Model.Subtotal.ToString("C")</strong></p>
+<p>IVA 13%: <strong>@Model.IVA.ToString("C")</strong></p>
+@if (Model.ComisionTarjeta > 0)
+{
+    <p>Comisión Tarjeta 2%: <strong>@Model.ComisionTarjeta.ToString("C")</strong></p>
+}
+@if (Model.DineroUtilizado > 0)
+{
+    <p>Nota de crédito aplicada: <strong>-@Model.DineroUtilizado.ToString("C")</strong></p>
+}
+<h3>Total: @Model.Total.ToString("C")</h3>
+
+<a class="btn btn-default" href="@Url.Action("Pdf","Ordenes", new { id = Model.VentaID })">Descargar PDF</a>
+<a class="btn btn-link" href="@Url.Action("Index")">Volver</a>

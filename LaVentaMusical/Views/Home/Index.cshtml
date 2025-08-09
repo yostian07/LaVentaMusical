@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Inicio";
+}
+
+<div class="jumbotron">
+    <h1>LaVentaMusical</h1>
+    <p class="lead">Compra canciones por unidad, paga con PayPal, transferencia o tarjeta, y recibe tu factura en PDF por correo.</p>
+    <p>
+        <a class="btn btn-primary btn-lg" href="@Url.Action("Index","Canciones")">Explorar catálogo »</a>
+    </p>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Catálogo</h2>
+        <p>Busca canciones por artista, álbum o género. Agrega al carrito y revisa precios en el momento.</p>
+        <p><a class="btn btn-default" href="@Url.Action("Index","Canciones")">Ir al catálogo »</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Carrito</h2>
+        <p>Edita cantidades, elimina items y ve el subtotal. En el checkout calculamos IVA (13%) y comisión por tarjeta (2%).</p>
+        <p><a class="btn btn-default" href="@Url.Action("Index","Carrito")">Ver carrito »</a></p>
+    </div>
+    <div class="col-md-4">
+        <h2>Mis compras</h2>
+        <p>Consulta tus facturas, descarga el PDF o reenvíalo por correo cuando lo necesites.</p>
+        <p><a class="btn btn-default" href="@Url.Action("Index","Ordenes")">Historial de compras »</a></p>
+    </div>
+</div>

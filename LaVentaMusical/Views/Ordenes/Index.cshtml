@@ -1,0 +1,22 @@
+@model IEnumerable<LaVentaMusical.Infrastructure.DemoVenta>
+
+@{ ViewBag.Title = "Mis compras"; }
+
+<h2>Mis compras</h2>
+<table class="table">
+    <thead><tr><th>Factura</th><th>Fecha</th><th>Total</th><th></th></tr></thead>
+    <tbody>
+        @foreach (var o in Model)
+        {
+            <tr>
+                <td>@o.NumeroFactura</td>
+                <td>@o.FechaCompra</td>
+                <td>@o.Total.ToString("C")</td>
+                <td>
+                    <a class="btn btn-sm btn-primary" href="@Url.Action("Detalle","Ordenes", new { id = o.VentaID })">Ver</a>
+                    <a class="btn btn-sm btn-default" href="@Url.Action("Pdf","Ordenes", new { id = o.VentaID })">PDF</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

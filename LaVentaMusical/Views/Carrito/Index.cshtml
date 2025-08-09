@@ -1,0 +1,48 @@
+@model LaVentaMusical.Models.ViewModels.CarritoVM
+
+@{ ViewBag.Title = "Carrito"; }
+
+<h2>Carrito</h2>
+
+@if (!Model.Lineas.Any())
+{
+    <p>Tu carrito está vacío.</p>
+    <a class="btn btn-primary" href="@Url.Action("Index","Canciones")">Ir al catálogo</a>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr><th>Canción</th><th>Precio</th><th>Cantidad</th><th>Total</th><th></th></tr>
+        </thead>
+        <tbody>
+            @foreach (var l in Model.Lineas)
+            {
+                <tr>
+                    <td>@l.Nombre (@l.CancionID)</td>
+                    <td class="text-right">@l.Precio.ToString("C")</td>
+                    <td class="text-right">
+                        @using (Html.BeginForm("Actualizar", "Carrito", FormMethod.Post))
+                        {
+                            @Html.Hidden("id", l.CancionID)
+                            <input type="number" name="cantidad" value="@l.Cantidad" min="1" class="form-control" style="width:90px;display:inline-block" />
+                            <button class="btn btn-sm btn-primary">Actualizar</button>
+                        }
+                    </td>
+                    <td class="text-right">@l.SubtotalLinea.ToString("C")</td>
+                    <td>
+                        @using (Html.BeginForm("Quitar", "Carrito", FormMethod.Post))
+                        {@Html.Hidden("id", l.CancionID) <button class="btn btn-sm btn-danger">Quitar</button>}
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-right">
+        <h4>Subtotal: @Model.Subtotal.ToString("C")</h4>
+        <a class="btn btn-success" href="@Url.Action("Index","Checkout")">Continuar con el pago</a>
+        <a class="btn btn-link" href="@Url.Action("Index","Canciones")">Seguir comprando</a>
+        <a class="btn btn-outline-danger" href="@Url.Action("Vaciar","Carrito")">Vaciar carrito</a>
+    </div>
+}

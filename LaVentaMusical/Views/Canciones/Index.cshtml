@@ -1,0 +1,41 @@
+@model IEnumerable<LaVentaMusical.Infrastructure.DemoCancion>
+@{
+    ViewBag.Title = "Catálogo";
+}
+
+<h2>Canciones disponibles</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th class="text-right">Precio</th>
+            <th class="text-right">Stock</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.CancionID</td>
+                <td>@c.Nombre</td>
+                <td class="text-right">@c.Precio.ToString("C")</td>
+                <td class="text-right">@c.CantidadDisponible</td>
+                <td>
+                    @using (Html.BeginForm("Agregar", "Canciones", FormMethod.Post))
+                    {
+                        @Html.Hidden("id", c.CancionID)
+                        <input type="number" name="cantidad" value="1" min="1" class="form-control" style="width:90px;display:inline-block" />
+                        <button class="btn btn-primary">Agregar</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p>
+    <a class="btn btn-success" href="@Url.Action("Index","Carrito")">Ver Carrito</a>
+</p>

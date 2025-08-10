@@ -1,4 +1,4 @@
-@model IEnumerable<LaVentaMusical.Infrastructure.DemoCancion>
+@model IEnumerable<LaVentaMusical.Models.Cancion>
 @{
     ViewBag.Title = "Catálogo";
 }
@@ -20,7 +20,7 @@
         {
             <tr>
                 <td>@c.CancionID</td>
-                <td>@c.Nombre</td>
+                <td>@c.NombreCancion</td>
                 <td class="text-right">@c.Precio.ToString("C")</td>
                 <td class="text-right">@c.CantidadDisponible</td>
                 <td>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="1b80fec681284e77b77008ffc0b17d27" Name="Diagram1">
+        <EntityTypeShape EntityType="PAV_PF_Grupo02Model.Albumes" Width="1.5" PointX="3" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PAV_PF_Grupo02Model.Artistas" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PAV_PF_Grupo02Model.Canciones" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="PAV_PF_Grupo02Model.DetalleVenta" Width="1.5" PointX="7.5" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PAV_PF_Grupo02Model.Generos" Width="1.5" PointX="3" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PAV_PF_Grupo02Model.Perfiles" Width="1.5" PointX="0.75" PointY="9.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PAV_PF_Grupo02Model.Usuarios" Width="1.5" PointX="3" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PAV_PF_Grupo02Model.Ventas" Width="1.5" PointX="5.25" PointY="8.125" IsExpanded="true" />
+        <AssociationConnector Association="PAV_PF_Grupo02Model.FK__Albumes__Artista__31EC6D26" ManuallyRouted="false" />
+        <AssociationConnector Association="PAV_PF_Grupo02Model.FK__Canciones__Album__36B12243" ManuallyRouted="false" />
+        <AssociationConnector Association="PAV_PF_Grupo02Model.FK__Canciones__Gener__35BCFE0A" ManuallyRouted="false" />
+        <AssociationConnector Association="PAV_PF_Grupo02Model.FK__DetalleVe__Canci__403A8C7D" ManuallyRouted="false" />
+        <AssociationConnector Association="PAV_PF_Grupo02Model.FK__DetalleVe__Venta__3F466844" ManuallyRouted="false" />
+        <AssociationConnector Association="PAV_PF_Grupo02Model.FK__Usuarios__Perfil__2B3F6F97" ManuallyRouted="false" />
+        <AssociationConnector Association="PAV_PF_Grupo02Model.FK__Ventas__UsuarioI__3A81B327" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

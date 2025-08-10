@@ -7,7 +7,7 @@ namespace LaVentaMusical.Services
 {
     public static class PdfService
     {
-        public static byte[] BuildInvoice(Venta venta)
+        public static byte[] BuildInvoice(Ventas venta)
         {
             using (var ms = new MemoryStream())
             {
@@ -18,7 +18,7 @@ namespace LaVentaMusical.Services
                 var h1 = new Paragraph($"Factura {venta.NumeroFactura}", new Font(Font.FontFamily.HELVETICA, 16, Font.BOLD));
                 doc.Add(h1);
                 doc.Add(new Paragraph($"Fecha: {venta.FechaCompra:yyyy-MM-dd HH:mm}"));
-                doc.Add(new Paragraph($"Cliente: {venta.Usuario?.NombreCompleto ?? "Cliente"}"));
+                doc.Add(new Paragraph($"Cliente: {venta.Usuarios?.NombreCompleto ?? "Cliente"}"));
                 doc.Add(new Paragraph($"Método: {(string.IsNullOrEmpty(venta.NumeroTarjetaEnmascarado) ? venta.TipoPago : venta.NumeroTarjetaEnmascarado)}"));
                 doc.Add(new Paragraph(" "));
 
@@ -27,10 +27,10 @@ namespace LaVentaMusical.Services
                 table.AddCell("#"); table.AddCell("Canción"); table.AddCell("Cant."); table.AddCell("Total");
 
                 int i = 1;
-                foreach (var d in venta.Detalles)
+                foreach (var d in venta.DetalleVenta)
                 {
                     table.AddCell((i++).ToString());
-                    table.AddCell($"{d.CancionID} - {d.Cancion?.NombreCancion ?? "Canción"}");
+                    table.AddCell($"{d.CancionID} - {d.Canciones?.NombreCancion ?? "Canción"}");
                     table.AddCell(d.Cantidad.ToString());
                     table.AddCell(d.Subtotal.ToString("C"));
                 }

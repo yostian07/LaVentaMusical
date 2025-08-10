@@ -9,7 +9,7 @@ namespace LaVentaMusical.Controllers
     public class CancionesController : Controller
     {
         // ⬇️ Usa el nombre real de TU contexto
-        private readonly PAV_PF_Grupo02Entities db = new PAV_PF_Grupo02Entities();
+        private readonly PAV_PF_Grupo02Entities1 db = new PAV_PF_Grupo02Entities1();
 
         public ActionResult Index()
         {

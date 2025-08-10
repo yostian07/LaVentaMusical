@@ -1,15 +1,15 @@
-@model LaVentaMusical.Infrastructure.DemoVenta
+@model LaVentaMusical.Models.Venta
 @{
     ViewBag.Title = "Detalle de Factura";
 }
 
 <h2>Factura @Model.NumeroFactura</h2>
-<p>Fecha: @Model.FechaCompra</p>
+<p>Fecha: @Model.FechaCompra.ToString("yyyy-MM-dd HH:mm")</p>
 <p>
     Método:
-    @(string.IsNullOrEmpty(Model.TarjetaEnmascarada)
-        ? Model.MetodoPago
-        : Model.TarjetaEnmascarada)
+    @(string.IsNullOrEmpty(Model.NumeroTarjetaEnmascarado)
+        ? Model.TipoPago
+        : Model.NumeroTarjetaEnmascarado)
 </p>
 
 <table class="table">
@@ -25,10 +25,8 @@
         @foreach (var d in Model.Detalles)
         {
             <tr>
-                <td>@d.Nombre (@d.CancionID)</td>
+                <td>@d.Cancion.NombreCancion (@d.CancionID)</td>
                 <td class="text-right">@d.Cantidad</td>
-
-
                 <td class="text-right">@d.PrecioUnitario.ToString("C")</td>
                 <td class="text-right">@d.Subtotal.ToString("C")</td>
             </tr>

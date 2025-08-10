@@ -1,4 +1,4 @@
-@model IEnumerable<LaVentaMusical.Infrastructure.DemoVenta>
+@model IEnumerable<LaVentaMusical.Models.Venta>
 
 @{ ViewBag.Title = "Mis compras"; }
 
@@ -10,7 +10,7 @@
         {
             <tr>
                 <td>@o.NumeroFactura</td>
-                <td>@o.FechaCompra</td>
+                <td>@o.FechaCompra.ToString("yyyy-MM-dd HH:mm")</td>
                 <td>@o.Total.ToString("C")</td>
                 <td>
                     <a class="btn btn-sm btn-primary" href="@Url.Action("Detalle","Ordenes", new { id = o.VentaID })">Ver</a>

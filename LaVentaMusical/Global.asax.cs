@@ -18,8 +18,7 @@ namespace LaVentaMusical
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             
-            // Sembrar la base de datos con datos iniciales
-            DatabaseSeeder.SeedDatabase();
+
         }
     }
 }

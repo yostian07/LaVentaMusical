@@ -188,7 +188,6 @@
     <Compile Include="Helpers\CarritoHelper.cs" />
     <Compile Include="Infrastructure\DemoStore.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\DatabaseSeeder.cs" />
     <Compile Include="Models\Dominio.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />

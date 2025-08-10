@@ -7,8 +7,8 @@ namespace LaVentaMusical.Models
         public PAV_PF_Grupo02Entities() 
             : base("PAV_PF_Grupo02Connection")
         {
-            // Configurar para que no inicialice automáticamente la base de datos
-            Database.SetInitializer<PAV_PF_Grupo02Entities>(null);
+            // Temporarily enable database initialization for creation
+            Database.SetInitializer<PAV_PF_Grupo02Entities>(new DropCreateDatabaseIfModelChanges<PAV_PF_Grupo02Entities>());
         }
 
         public virtual DbSet<Perfil> Perfiles { get; set; }

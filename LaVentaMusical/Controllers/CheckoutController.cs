@@ -11,7 +11,7 @@ namespace LaVentaMusical.Controllers
 {
     public class CheckoutController : Controller
     {
-        private readonly PAV_PF_Grupo02Entities db = new PAV_PF_Grupo02Entities();
+        private readonly PAV_PF_Grupo02Entities1 db = new PAV_PF_Grupo02Entities1();
 
         // GET: /Checkout
         public ActionResult Index()

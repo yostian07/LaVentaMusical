@@ -1,0 +1,592 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PAV_PF_Grupo02Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Albumes">
+          <Key>
+            <PropertyRef Name="AlbumID" />
+          </Key>
+          <Property Name="AlbumID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="ArtistaID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="NombreAlbum" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="AnioLanzamiento" Type="int" />
+          <Property Name="Imagen" Type="nvarchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="Artistas">
+          <Key>
+            <PropertyRef Name="ArtistaID" />
+          </Key>
+          <Property Name="ArtistaID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="NombreArtistico" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="FechaNacimiento" Type="date" Nullable="false" />
+          <Property Name="NombreReal" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Nacionalidad" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Foto" Type="nvarchar" MaxLength="300" />
+          <Property Name="BiografiaLink" Type="nvarchar" MaxLength="300" />
+        </EntityType>
+        <EntityType Name="Canciones">
+          <Key>
+            <PropertyRef Name="CancionID" />
+          </Key>
+          <Property Name="CancionID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="GeneroID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="AlbumID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="NombreCancion" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="LinkMultimedia" Type="nvarchar" MaxLength="300" />
+          <Property Name="Precio" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="CantidadDisponible" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DetalleVenta">
+          <Key>
+            <PropertyRef Name="DetalleID" />
+          </Key>
+          <Property Name="DetalleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VentaID" Type="int" Nullable="false" />
+          <Property Name="CancionID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="PrecioUnitario" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Cantidad" Type="int" Nullable="false" />
+          <Property Name="Subtotal" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Generos">
+          <Key>
+            <PropertyRef Name="GeneroID" />
+          </Key>
+          <Property Name="GeneroID" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Perfiles">
+          <Key>
+            <PropertyRef Name="PerfilID" />
+          </Key>
+          <Property Name="PerfilID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombrePerfil" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="UsuarioID" />
+          </Key>
+          <Property Name="UsuarioID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Cedula" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="NombreCompleto" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Genero" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="CorreoElectronico" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="TipoTarjeta" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="DineroDisponible" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="NumeroTarjeta" Type="nvarchar" MaxLength="19" Nullable="false" />
+          <Property Name="PerfilID" Type="int" Nullable="false" />
+          <Property Name="IdentityUserID" Type="nvarchar" MaxLength="450" />
+        </EntityType>
+        <EntityType Name="Ventas">
+          <Key>
+            <PropertyRef Name="VentaID" />
+          </Key>
+          <Property Name="VentaID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UsuarioID" Type="int" Nullable="false" />
+          <Property Name="FechaCompra" Type="datetime" Nullable="false" />
+          <Property Name="TipoPago" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NumeroTarjetaEnmascarado" Type="nvarchar" MaxLength="19" />
+          <Property Name="CodigoTarjeta" Type="nvarchar" MaxLength="4" />
+          <Property Name="Subtotal" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="IVA" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="ComisionTarjeta" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Total" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="DineroUtilizado" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="NumeroFactura" Type="varchar" MaxLength="11" StoreGeneratedPattern="Computed" />
+          <Property Name="EsReversada" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Albumes__Artista__31EC6D26">
+          <End Role="Artistas" Type="Self.Artistas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Albumes" Type="Self.Albumes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artistas">
+              <PropertyRef Name="ArtistaID" />
+            </Principal>
+            <Dependent Role="Albumes">
+              <PropertyRef Name="ArtistaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Canciones__Album__36B12243">
+          <End Role="Albumes" Type="Self.Albumes" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Canciones" Type="Self.Canciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Albumes">
+              <PropertyRef Name="AlbumID" />
+            </Principal>
+            <Dependent Role="Canciones">
+              <PropertyRef Name="AlbumID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Canciones__Gener__35BCFE0A">
+          <End Role="Generos" Type="Self.Generos" Multiplicity="1" />
+          <End Role="Canciones" Type="Self.Canciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Generos">
+              <PropertyRef Name="GeneroID" />
+            </Principal>
+            <Dependent Role="Canciones">
+              <PropertyRef Name="GeneroID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleVe__Canci__403A8C7D">
+          <End Role="Canciones" Type="Self.Canciones" Multiplicity="1" />
+          <End Role="DetalleVenta" Type="Self.DetalleVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Canciones">
+              <PropertyRef Name="CancionID" />
+            </Principal>
+            <Dependent Role="DetalleVenta">
+              <PropertyRef Name="CancionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleVe__Venta__3F466844">
+          <End Role="Ventas" Type="Self.Ventas" Multiplicity="1" />
+          <End Role="DetalleVenta" Type="Self.DetalleVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ventas">
+              <PropertyRef Name="VentaID" />
+            </Principal>
+            <Dependent Role="DetalleVenta">
+              <PropertyRef Name="VentaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Usuarios__Perfil__2B3F6F97">
+          <End Role="Perfiles" Type="Self.Perfiles" Multiplicity="1" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Perfiles">
+              <PropertyRef Name="PerfilID" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="PerfilID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ventas__UsuarioI__3A81B327">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Ventas" Type="Self.Ventas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="UsuarioID" />
+            </Principal>
+            <Dependent Role="Ventas">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PAV_PF_Grupo02ModelStoreContainer">
+          <EntitySet Name="Albumes" EntityType="Self.Albumes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Artistas" EntityType="Self.Artistas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Canciones" EntityType="Self.Canciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DetalleVenta" EntityType="Self.DetalleVenta" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Generos" EntityType="Self.Generos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Perfiles" EntityType="Self.Perfiles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ventas" EntityType="Self.Ventas" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Albumes__Artista__31EC6D26" Association="Self.FK__Albumes__Artista__31EC6D26">
+            <End Role="Artistas" EntitySet="Artistas" />
+            <End Role="Albumes" EntitySet="Albumes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Canciones__Album__36B12243" Association="Self.FK__Canciones__Album__36B12243">
+            <End Role="Albumes" EntitySet="Albumes" />
+            <End Role="Canciones" EntitySet="Canciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Canciones__Gener__35BCFE0A" Association="Self.FK__Canciones__Gener__35BCFE0A">
+            <End Role="Generos" EntitySet="Generos" />
+            <End Role="Canciones" EntitySet="Canciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleVe__Canci__403A8C7D" Association="Self.FK__DetalleVe__Canci__403A8C7D">
+            <End Role="Canciones" EntitySet="Canciones" />
+            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleVe__Venta__3F466844" Association="Self.FK__DetalleVe__Venta__3F466844">
+            <End Role="Ventas" EntitySet="Ventas" />
+            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Usuarios__Perfil__2B3F6F97" Association="Self.FK__Usuarios__Perfil__2B3F6F97">
+            <End Role="Perfiles" EntitySet="Perfiles" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ventas__UsuarioI__3A81B327" Association="Self.FK__Ventas__UsuarioI__3A81B327">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Ventas" EntitySet="Ventas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PAV_PF_Grupo02Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Albumes">
+          <Key>
+            <PropertyRef Name="AlbumID" />
+          </Key>
+          <Property Name="AlbumID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ArtistaID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NombreAlbum" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AnioLanzamiento" Type="Int32" />
+          <Property Name="Imagen" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Artistas" Relationship="Self.FK__Albumes__Artista__31EC6D26" FromRole="Albumes" ToRole="Artistas" />
+          <NavigationProperty Name="Canciones" Relationship="Self.FK__Canciones__Album__36B12243" FromRole="Albumes" ToRole="Canciones" />
+        </EntityType>
+        <EntityType Name="Artistas">
+          <Key>
+            <PropertyRef Name="ArtistaID" />
+          </Key>
+          <Property Name="ArtistaID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NombreArtistico" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FechaNacimiento" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="NombreReal" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Nacionalidad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Foto" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="BiografiaLink" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Albumes" Relationship="Self.FK__Albumes__Artista__31EC6D26" FromRole="Artistas" ToRole="Albumes" />
+        </EntityType>
+        <EntityType Name="Canciones">
+          <Key>
+            <PropertyRef Name="CancionID" />
+          </Key>
+          <Property Name="CancionID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GeneroID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AlbumID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NombreCancion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LinkMultimedia" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="Precio" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="CantidadDisponible" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Albumes" Relationship="Self.FK__Canciones__Album__36B12243" FromRole="Canciones" ToRole="Albumes" />
+          <NavigationProperty Name="Generos" Relationship="Self.FK__Canciones__Gener__35BCFE0A" FromRole="Canciones" ToRole="Generos" />
+          <NavigationProperty Name="DetalleVenta" Relationship="Self.FK__DetalleVe__Canci__403A8C7D" FromRole="Canciones" ToRole="DetalleVenta" />
+        </EntityType>
+        <EntityType Name="DetalleVenta">
+          <Key>
+            <PropertyRef Name="DetalleID" />
+          </Key>
+          <Property Name="DetalleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VentaID" Type="Int32" Nullable="false" />
+          <Property Name="CancionID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PrecioUnitario" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Cantidad" Type="Int32" Nullable="false" />
+          <Property Name="Subtotal" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="Canciones" Relationship="Self.FK__DetalleVe__Canci__403A8C7D" FromRole="DetalleVenta" ToRole="Canciones" />
+          <NavigationProperty Name="Ventas" Relationship="Self.FK__DetalleVe__Venta__3F466844" FromRole="DetalleVenta" ToRole="Ventas" />
+        </EntityType>
+        <EntityType Name="Generos">
+          <Key>
+            <PropertyRef Name="GeneroID" />
+          </Key>
+          <Property Name="GeneroID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Canciones" Relationship="Self.FK__Canciones__Gener__35BCFE0A" FromRole="Generos" ToRole="Canciones" />
+        </EntityType>
+        <EntityType Name="Perfiles">
+          <Key>
+            <PropertyRef Name="PerfilID" />
+          </Key>
+          <Property Name="PerfilID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NombrePerfil" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK__Usuarios__Perfil__2B3F6F97" FromRole="Perfiles" ToRole="Usuarios" />
+        </EntityType>
+        <EntityType Name="Usuarios">
+          <Key>
+            <PropertyRef Name="UsuarioID" />
+          </Key>
+          <Property Name="UsuarioID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Cedula" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NombreCompleto" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Genero" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CorreoElectronico" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TipoTarjeta" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DineroDisponible" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="NumeroTarjeta" Type="String" MaxLength="19" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PerfilID" Type="Int32" Nullable="false" />
+          <Property Name="IdentityUserID" Type="String" MaxLength="450" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Perfiles" Relationship="Self.FK__Usuarios__Perfil__2B3F6F97" FromRole="Usuarios" ToRole="Perfiles" />
+          <NavigationProperty Name="Ventas" Relationship="Self.FK__Ventas__UsuarioI__3A81B327" FromRole="Usuarios" ToRole="Ventas" />
+        </EntityType>
+        <EntityType Name="Ventas">
+          <Key>
+            <PropertyRef Name="VentaID" />
+          </Key>
+          <Property Name="VentaID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UsuarioID" Type="Int32" Nullable="false" />
+          <Property Name="FechaCompra" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TipoPago" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NumeroTarjetaEnmascarado" Type="String" MaxLength="19" FixedLength="false" Unicode="true" />
+          <Property Name="CodigoTarjeta" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Subtotal" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="IVA" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="ComisionTarjeta" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Total" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="DineroUtilizado" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="NumeroFactura" Type="String" MaxLength="11" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="EsReversada" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="DetalleVenta" Relationship="Self.FK__DetalleVe__Venta__3F466844" FromRole="Ventas" ToRole="DetalleVenta" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.FK__Ventas__UsuarioI__3A81B327" FromRole="Ventas" ToRole="Usuarios" />
+        </EntityType>
+        <Association Name="FK__Albumes__Artista__31EC6D26">
+          <End Role="Artistas" Type="Self.Artistas" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Albumes" Type="Self.Albumes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artistas">
+              <PropertyRef Name="ArtistaID" />
+            </Principal>
+            <Dependent Role="Albumes">
+              <PropertyRef Name="ArtistaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Canciones__Album__36B12243">
+          <End Role="Albumes" Type="Self.Albumes" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Canciones" Type="Self.Canciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Albumes">
+              <PropertyRef Name="AlbumID" />
+            </Principal>
+            <Dependent Role="Canciones">
+              <PropertyRef Name="AlbumID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Canciones__Gener__35BCFE0A">
+          <End Role="Generos" Type="Self.Generos" Multiplicity="1" />
+          <End Role="Canciones" Type="Self.Canciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Generos">
+              <PropertyRef Name="GeneroID" />
+            </Principal>
+            <Dependent Role="Canciones">
+              <PropertyRef Name="GeneroID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleVe__Canci__403A8C7D">
+          <End Role="Canciones" Type="Self.Canciones" Multiplicity="1" />
+          <End Role="DetalleVenta" Type="Self.DetalleVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Canciones">
+              <PropertyRef Name="CancionID" />
+            </Principal>
+            <Dependent Role="DetalleVenta">
+              <PropertyRef Name="CancionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__DetalleVe__Venta__3F466844">
+          <End Role="Ventas" Type="Self.Ventas" Multiplicity="1" />
+          <End Role="DetalleVenta" Type="Self.DetalleVenta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ventas">
+              <PropertyRef Name="VentaID" />
+            </Principal>
+            <Dependent Role="DetalleVenta">
+              <PropertyRef Name="VentaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Usuarios__Perfil__2B3F6F97">
+          <End Role="Perfiles" Type="Self.Perfiles" Multiplicity="1" />
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Perfiles">
+              <PropertyRef Name="PerfilID" />
+            </Principal>
+            <Dependent Role="Usuarios">
+              <PropertyRef Name="PerfilID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ventas__UsuarioI__3A81B327">
+          <End Role="Usuarios" Type="Self.Usuarios" Multiplicity="1" />
+          <End Role="Ventas" Type="Self.Ventas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuarios">
+              <PropertyRef Name="UsuarioID" />
+            </Principal>
+            <Dependent Role="Ventas">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PAV_PF_Grupo02Entities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Albumes" EntityType="Self.Albumes" />
+          <EntitySet Name="Artistas" EntityType="Self.Artistas" />
+          <EntitySet Name="Canciones" EntityType="Self.Canciones" />
+          <EntitySet Name="DetalleVenta" EntityType="Self.DetalleVenta" />
+          <EntitySet Name="Generos" EntityType="Self.Generos" />
+          <EntitySet Name="Perfiles" EntityType="Self.Perfiles" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuarios" />
+          <EntitySet Name="Ventas" EntityType="Self.Ventas" />
+          <AssociationSet Name="FK__Albumes__Artista__31EC6D26" Association="Self.FK__Albumes__Artista__31EC6D26">
+            <End Role="Artistas" EntitySet="Artistas" />
+            <End Role="Albumes" EntitySet="Albumes" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Canciones__Album__36B12243" Association="Self.FK__Canciones__Album__36B12243">
+            <End Role="Albumes" EntitySet="Albumes" />
+            <End Role="Canciones" EntitySet="Canciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Canciones__Gener__35BCFE0A" Association="Self.FK__Canciones__Gener__35BCFE0A">
+            <End Role="Generos" EntitySet="Generos" />
+            <End Role="Canciones" EntitySet="Canciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleVe__Canci__403A8C7D" Association="Self.FK__DetalleVe__Canci__403A8C7D">
+            <End Role="Canciones" EntitySet="Canciones" />
+            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__DetalleVe__Venta__3F466844" Association="Self.FK__DetalleVe__Venta__3F466844">
+            <End Role="Ventas" EntitySet="Ventas" />
+            <End Role="DetalleVenta" EntitySet="DetalleVenta" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Usuarios__Perfil__2B3F6F97" Association="Self.FK__Usuarios__Perfil__2B3F6F97">
+            <End Role="Perfiles" EntitySet="Perfiles" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ventas__UsuarioI__3A81B327" Association="Self.FK__Ventas__UsuarioI__3A81B327">
+            <End Role="Usuarios" EntitySet="Usuarios" />
+            <End Role="Ventas" EntitySet="Ventas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PAV_PF_Grupo02ModelStoreContainer" CdmEntityContainer="PAV_PF_Grupo02Entities1">
+          <EntitySetMapping Name="Albumes">
+            <EntityTypeMapping TypeName="PAV_PF_Grupo02Model.Albumes">
+              <MappingFragment StoreEntitySet="Albumes">
+                <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+                <ScalarProperty Name="ArtistaID" ColumnName="ArtistaID" />
+                <ScalarProperty Name="NombreAlbum" ColumnName="NombreAlbum" />
+                <ScalarProperty Name="AnioLanzamiento" ColumnName="AnioLanzamiento" />
+                <ScalarProperty Name="Imagen" ColumnName="Imagen" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Artistas">
+            <EntityTypeMapping TypeName="PAV_PF_Grupo02Model.Artistas">
+              <MappingFragment StoreEntitySet="Artistas">
+                <ScalarProperty Name="ArtistaID" ColumnName="ArtistaID" />
+                <ScalarProperty Name="NombreArtistico" ColumnName="NombreArtistico" />
+                <ScalarProperty Name="FechaNacimiento" ColumnName="FechaNacimiento" />
+                <ScalarProperty Name="NombreReal" ColumnName="NombreReal" />
+                <ScalarProperty Name="Nacionalidad" ColumnName="Nacionalidad" />
+                <ScalarProperty Name="Foto" ColumnName="Foto" />
+                <ScalarProperty Name="BiografiaLink" ColumnName="BiografiaLink" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Canciones">
+            <EntityTypeMapping TypeName="PAV_PF_Grupo02Model.Canciones">
+              <MappingFragment StoreEntitySet="Canciones">
+                <ScalarProperty Name="CancionID" ColumnName="CancionID" />
+                <ScalarProperty Name="GeneroID" ColumnName="GeneroID" />
+                <ScalarProperty Name="AlbumID" ColumnName="AlbumID" />
+                <ScalarProperty Name="NombreCancion" ColumnName="NombreCancion" />
+                <ScalarProperty Name="LinkMultimedia" ColumnName="LinkMultimedia" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="CantidadDisponible" ColumnName="CantidadDisponible" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DetalleVenta">
+            <EntityTypeMapping TypeName="PAV_PF_Grupo02Model.DetalleVenta">
+              <MappingFragment StoreEntitySet="DetalleVenta">
+                <ScalarProperty Name="DetalleID" ColumnName="DetalleID" />
+                <ScalarProperty Name="VentaID" ColumnName="VentaID" />
+                <ScalarProperty Name="CancionID" ColumnName="CancionID" />
+                <ScalarProperty Name="PrecioUnitario" ColumnName="PrecioUnitario" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Generos">
+            <EntityTypeMapping TypeName="PAV_PF_Grupo02Model.Generos">
+              <MappingFragment StoreEntitySet="Generos">
+                <ScalarProperty Name="GeneroID" ColumnName="GeneroID" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Perfiles">
+            <EntityTypeMapping TypeName="PAV_PF_Grupo02Model.Perfiles">
+              <MappingFragment StoreEntitySet="Perfiles">
+                <ScalarProperty Name="PerfilID" ColumnName="PerfilID" />
+                <ScalarProperty Name="NombrePerfil" ColumnName="NombrePerfil" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="PAV_PF_Grupo02Model.Usuarios">
+              <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
+                <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+                <ScalarProperty Name="NombreCompleto" ColumnName="NombreCompleto" />
+                <ScalarProperty Name="Genero" ColumnName="Genero" />
+                <ScalarProperty Name="CorreoElectronico" ColumnName="CorreoElectronico" />
+                <ScalarProperty Name="TipoTarjeta" ColumnName="TipoTarjeta" />
+                <ScalarProperty Name="DineroDisponible" ColumnName="DineroDisponible" />
+                <ScalarProperty Name="NumeroTarjeta" ColumnName="NumeroTarjeta" />
+                <ScalarProperty Name="PerfilID" ColumnName="PerfilID" />
+                <ScalarProperty Name="IdentityUserID" ColumnName="IdentityUserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ventas">
+            <EntityTypeMapping TypeName="PAV_PF_Grupo02Model.Ventas">
+              <MappingFragment StoreEntitySet="Ventas">
+                <ScalarProperty Name="VentaID" ColumnName="VentaID" />
+                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
+                <ScalarProperty Name="FechaCompra" ColumnName="FechaCompra" />
+                <ScalarProperty Name="TipoPago" ColumnName="TipoPago" />
+                <ScalarProperty Name="NumeroTarjetaEnmascarado" ColumnName="NumeroTarjetaEnmascarado" />
+                <ScalarProperty Name="CodigoTarjeta" ColumnName="CodigoTarjeta" />
+                <ScalarProperty Name="Subtotal" ColumnName="Subtotal" />
+                <ScalarProperty Name="IVA" ColumnName="IVA" />
+                <ScalarProperty Name="ComisionTarjeta" ColumnName="ComisionTarjeta" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="DineroUtilizado" ColumnName="DineroUtilizado" />
+                <ScalarProperty Name="NumeroFactura" ColumnName="NumeroFactura" />
+                <ScalarProperty Name="EsReversada" ColumnName="EsReversada" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

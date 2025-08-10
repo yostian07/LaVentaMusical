@@ -9,7 +9,7 @@ namespace LaVentaMusical.Controllers
 {
     public class OrdenesController : Controller
     {
-        private readonly PAV_PF_Grupo02Entities db = new PAV_PF_Grupo02Entities();
+        private readonly PAV_PF_Grupo02Entities1 db = new PAV_PF_Grupo02Entities1();
 
         public ActionResult Index()
         {

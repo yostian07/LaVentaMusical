@@ -18,20 +18,15 @@ namespace LaVentaMusical.Models
         }
     }
 
- 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext() : base("DefaultConnection", throwIfV1Schema: false) { }
         public static ApplicationDbContext Create() => new ApplicationDbContext();
 
-    
+        // Solo entidades manuales, no las generadas por EF
         public DbSet<Perfil> Perfiles { get; set; }
-        public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Genero> Generos { get; set; }
         public DbSet<Artista> Artistas { get; set; }
         public DbSet<Album> Albumes { get; set; }
-        public DbSet<Cancion> Canciones { get; set; }
-        public DbSet<Venta> Ventas { get; set; }
-        public DbSet<DetalleVenta> DetalleVenta { get; set; }
     }
 }

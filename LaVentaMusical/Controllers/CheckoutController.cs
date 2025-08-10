@@ -105,7 +105,7 @@ namespace LaVentaMusical.Controllers
                     }
 
                     // Crear venta en base de datos
-                    var venta = new Venta
+                    var venta = new Ventas
                     {
                         UsuarioID = GetCurrentUserId(),
                         FechaCompra = DateTime.Now,
@@ -163,12 +163,12 @@ namespace LaVentaMusical.Controllers
             }
         }
 
-        private ActionResult FinalizarCompra(Venta venta, string email)
+        private ActionResult FinalizarCompra(Ventas venta, string email)
         {
             // Cargar los datos completos de la venta para el PDF
             var ventaCompleta = db.Ventas
-                .Include(v => v.Usuario)
-                .Include(v => v.Detalles.Select(d => d.Cancion))
+                .Include(v => v.Usuarios)
+                .Include(v => v.DetalleVenta.Select(d => d.Canciones))
                 .FirstOrDefault(v => v.VentaID == venta.VentaID);
 
             // Generar PDF
@@ -218,7 +218,7 @@ namespace LaVentaMusical.Controllers
             return 1;
         }
 
-        private Usuario GetCurrentUser()
+        private Usuarios GetCurrentUser()
         {
             // Implementar lógica para obtener usuario actual
             // Por ahora retorna el primer usuario o null

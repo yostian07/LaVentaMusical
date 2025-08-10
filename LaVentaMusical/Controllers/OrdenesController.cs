@@ -15,9 +15,9 @@ namespace LaVentaMusical.Controllers
         {
             // Usar solo base de datos real
             var ventas = db.Ventas
-                          .Include(v => v.Usuario)
-                          .Include(v => v.Detalles)
-                          .Include(v => v.Detalles.Select(d => d.Cancion))
+                          .Include(v => v.Usuarios)
+                          .Include(v => v.DetalleVenta)
+                          .Include(v => v.DetalleVenta.Select(d => d.Canciones))
                           .Where(v => !v.EsReversada)
                           .OrderByDescending(v => v.FechaCompra)
                           .ToList();
@@ -29,9 +29,9 @@ namespace LaVentaMusical.Controllers
         {
             // Usar solo base de datos real
             var venta = db.Ventas
-                         .Include(v => v.Usuario)
-                         .Include(v => v.Detalles)
-                         .Include(v => v.Detalles.Select(d => d.Cancion))
+                         .Include(v => v.Usuarios)
+                         .Include(v => v.DetalleVenta)
+                         .Include(v => v.DetalleVenta.Select(d => d.Canciones))
                          .FirstOrDefault(v => v.VentaID == id && !v.EsReversada);
 
             if (venta == null) return HttpNotFound();
@@ -43,9 +43,9 @@ namespace LaVentaMusical.Controllers
         {
             // Usar solo base de datos real
             var venta = db.Ventas
-                         .Include(v => v.Usuario)
-                         .Include(v => v.Detalles)
-                         .Include(v => v.Detalles.Select(d => d.Cancion))
+                         .Include(v => v.Usuarios)
+                         .Include(v => v.DetalleVenta)
+                         .Include(v => v.DetalleVenta.Select(d => d.Canciones))
                          .FirstOrDefault(v => v.VentaID == id && !v.EsReversada);
 
             if (venta == null) return HttpNotFound();

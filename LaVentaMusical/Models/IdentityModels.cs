@@ -23,10 +23,10 @@ namespace LaVentaMusical.Models
         public ApplicationDbContext() : base("DefaultConnection", throwIfV1Schema: false) { }
         public static ApplicationDbContext Create() => new ApplicationDbContext();
 
-        // Solo entidades manuales, no las generadas por EF
-        public DbSet<Perfil> Perfiles { get; set; }
-        public DbSet<Genero> Generos { get; set; }
-        public DbSet<Artista> Artistas { get; set; }
-        public DbSet<Album> Albumes { get; set; }
+        // Use the EDMX-generated entities (plural names)
+        public DbSet<Perfiles> Perfiles { get; set; }
+        public DbSet<Generos> Generos { get; set; }
+        public DbSet<Artistas> Artistas { get; set; }
+        public DbSet<Albumes> Albumes { get; set; }
     }
 }

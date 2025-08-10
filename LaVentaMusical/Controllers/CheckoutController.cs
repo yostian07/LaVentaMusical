@@ -1,26 +1,31 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Web.Mvc;
 using LaVentaMusical.Helpers;
 using LaVentaMusical.Infrastructure;
 using LaVentaMusical.Models.ViewModels;
 using LaVentaMusical.Services;
+using LaVentaMusical.Models;
 
 namespace LaVentaMusical.Controllers
 {
     public class CheckoutController : Controller
     {
+        private readonly PAV_PF_Grupo02Entities db = new PAV_PF_Grupo02Entities();
+
         // GET: /Checkout
         public ActionResult Index()
         {
             var cart = CarritoHelper.Get(Session);
+            bool demoMode = bool.Parse(ConfigurationManager.AppSettings["DemoMode"] ?? "false");
 
             var vm = new CheckoutVM
             {
                 Carrito = cart,
                 Subtotal = cart.Subtotal,
                 IVA = Math.Round(cart.Subtotal * 0.13m, 2),
-                DineroDisponibleUsuario = DemoStore.DemoDineroDisponible
+                DineroDisponibleUsuario = demoMode ? DemoStore.DemoDineroDisponible : GetUserAvailableMoney()
             };
 
             return View(vm);
@@ -31,6 +36,7 @@ namespace LaVentaMusical.Controllers
         public ActionResult Pagar(CheckoutVM input)
         {
             var cart = CarritoHelper.Get(Session);
+            bool demoMode = bool.Parse(ConfigurationManager.AppSettings["DemoMode"] ?? "false");
 
             if (!cart.Lineas.Any())
             {
@@ -77,9 +83,22 @@ namespace LaVentaMusical.Controllers
             var bruto = subtotal + iva + comision;
 
             // Aplicar nota de crédito (dinero disponible demo)
-            var creditoAplicar = Math.Min(DemoStore.DemoDineroDisponible, bruto);
+            var dineroDisponible = demoMode ? DemoStore.DemoDineroDisponible : GetUserAvailableMoney();
+            var creditoAplicar = Math.Min(dineroDisponible, bruto);
             var total = bruto - creditoAplicar;
 
+            if (demoMode)
+            {
+                return ProcessDemoPayment(cart, input, subtotal, iva, comision, creditoAplicar, total);
+            }
+            else
+            {
+                return ProcessRealPayment(cart, input, subtotal, iva, comision, creditoAplicar, total);
+            }
+        }
+
+        private ActionResult ProcessDemoPayment(CarritoVM cart, CheckoutVM input, decimal subtotal, decimal iva, decimal comision, decimal creditoAplicar, decimal total)
+        {
             // Validar stock
             foreach (var l in cart.Lineas)
             {
@@ -108,16 +127,120 @@ namespace LaVentaMusical.Controllers
             venta.ComisionTarjeta = comision;
             venta.Total = total;
 
-            // Generar PDF
-            var pdf = PdfService.BuildInvoice(venta);
+            return FinalizarCompra(venta, DemoStore.DemoUserEmail);
+        }
 
-            // Enviar por correo (SMTP configurado en Web.config)
+        private ActionResult ProcessRealPayment(CarritoVM cart, CheckoutVM input, decimal subtotal, decimal iva, decimal comision, decimal creditoAplicar, decimal total)
+        {
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    // Validar stock
+                    foreach (var l in cart.Lineas)
+                    {
+                        var cancion = db.Canciones.Find(l.CancionID);
+                        if (cancion == null || cancion.CantidadDisponible < l.Cantidad)
+                        {
+                            TempData["error"] = $"Stock insuficiente para '{cancion?.NombreCancion ?? "canción"}'. Disponible: {cancion?.CantidadDisponible ?? 0}.";
+                            return RedirectToAction("Index");
+                        }
+                    }
+
+                    // Crear venta en base de datos
+                    var venta = new Venta
+                    {
+                        UsuarioID = GetCurrentUserId(),
+                        FechaCompra = DateTime.Now,
+                        TipoPago = input.MetodoPago,
+                        NumeroTarjetaEnmascarado = input.Ultimos4 != null ? $"****-****-****-{input.Ultimos4}" : null,
+                        CodigoTarjeta = input.Ultimos4,
+                        Subtotal = subtotal,
+                        IVA = iva,
+                        ComisionTarjeta = comision,
+                        Total = total,
+                        DineroUtilizado = creditoAplicar,
+                        EsReversada = false
+                    };
+
+                    db.Ventas.Add(venta);
+                    db.SaveChanges(); // Para obtener el VentaID
+
+                    // Crear detalles de venta
+                    foreach (var l in cart.Lineas)
+                    {
+                        var detalle = new DetalleVenta
+                        {
+                            VentaID = venta.VentaID,
+                            CancionID = l.CancionID,
+                            PrecioUnitario = l.Precio,
+                            Cantidad = l.Cantidad,
+                            Subtotal = l.SubtotalLinea // ✅ Corrección: usar SubtotalLinea
+                        };
+                        db.DetalleVenta.Add(detalle);
+
+                        // Descontar stock
+                        var cancion = db.Canciones.Find(l.CancionID);
+                        cancion.CantidadDisponible -= l.Cantidad;
+                    }
+
+                    // Actualizar dinero disponible del usuario
+                    var usuario = GetCurrentUser();
+                    if (usuario != null)
+                    {
+                        usuario.DineroDisponible -= creditoAplicar;
+                        if (usuario.DineroDisponible < 0) usuario.DineroDisponible = 0;
+                    }
+
+                    db.SaveChanges();
+                    transaction.Commit();
+
+                    // Convertir a DemoVenta para mantener compatibilidad
+                    var ventaDemo = new DemoVenta
+                    {
+                        VentaID = venta.VentaID,
+                        NumeroFactura = venta.NumeroFactura,
+                        FechaCompra = venta.FechaCompra,
+                        MetodoPago = venta.TipoPago,
+                        TarjetaEnmascarada = venta.NumeroTarjetaEnmascarado,
+                        Subtotal = venta.Subtotal,
+                        IVA = venta.IVA,
+                        ComisionTarjeta = venta.ComisionTarjeta,
+                        DineroUtilizado = venta.DineroUtilizado,
+                        Total = venta.Total,
+                        Detalles = cart.Lineas.Select(l => new DemoVentaDetalle
+                        {
+                            CancionID = l.CancionID,
+                            Nombre = l.Nombre,
+                            Cantidad = l.Cantidad,
+                            PrecioUnitario = l.Precio,
+                            Subtotal = l.SubtotalLinea // ✅ Corrección: usar SubtotalLinea
+                        }).ToList()
+                    };
+
+                    return FinalizarCompra(ventaDemo, usuario?.CorreoElectronico ?? "cliente@demo.com");
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    TempData["error"] = "Error procesando el pago: " + ex.Message;
+                    return RedirectToAction("Index");
+                }
+            }
+        }
+
+        private ActionResult FinalizarCompra(DemoVenta venta, string email)
+        {
+            // Generar PDF
+            var pdfBytes = PdfService.BuildInvoice(venta); // ✅ Corrección: cambiar nombre de variable
+
+            // Enviar por correo
             try
             {
                 InvoiceEmailService.Send(
-                    DemoStore.DemoUserEmail,
+                    email,
                     $"Factura {venta.NumeroFactura}",
-                    pdf,
+                    pdfBytes, // ✅ Usar nuevo nombre de variable
                     $"{venta.NumeroFactura}.pdf"
                 );
             }
@@ -126,14 +249,14 @@ namespace LaVentaMusical.Controllers
                 TempData["warn"] = "Factura generada, pero el correo no se pudo enviar: " + ex.Message;
             }
 
-            //  guardar copia local del PDF
+            // Guardar copia local del PDF
             try
             {
                 var path = Server.MapPath("~/App_Data/Facturas");
                 System.IO.Directory.CreateDirectory(path);
-                System.IO.File.WriteAllBytes(System.IO.Path.Combine(path, venta.NumeroFactura + ".pdf"), pdf);
+                System.IO.File.WriteAllBytes(System.IO.Path.Combine(path, venta.NumeroFactura + ".pdf"), pdfBytes); // ✅ Usar nuevo nombre de variable
             }
-            catch { /* ignorar en demo */ }
+            catch { /* ignorar */ }
 
             // Vaciar carrito
             CarritoHelper.Clear(Session);
@@ -142,7 +265,27 @@ namespace LaVentaMusical.Controllers
             return RedirectToAction("Detalle", "Ordenes", new { id = venta.VentaID });
         }
 
-       
+        private decimal GetUserAvailableMoney()
+        {
+            // Implementar lógica para obtener dinero disponible del usuario actual
+            // Por ahora retorna un valor por defecto
+            return 1000m;
+        }
+
+        private int GetCurrentUserId()
+        {
+            // Implementar lógica para obtener ID del usuario actual
+            // Por ahora retorna 1 (usuario demo)
+            return 1;
+        }
+
+        private Usuario GetCurrentUser()
+        {
+            // Implementar lógica para obtener usuario actual
+            // Por ahora retorna el primer usuario o null
+            return db.Usuarios.FirstOrDefault();
+        }
+
         private bool Luhn(string s)
         {
             int sum = 0; bool alt = false;
@@ -153,6 +296,15 @@ namespace LaVentaMusical.Controllers
                 sum += n; alt = !alt;
             }
             return (sum % 10) == 0;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
